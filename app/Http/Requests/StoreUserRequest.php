@@ -24,8 +24,8 @@ class StoreUserRequest extends FormRequest
         return [
           'name' => 'required|string|min:3|max:50',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|string|in:user,admin',
+            'password' => 'required|string|min:6',
+            'role' => 'required|string|in:user,admin,annimateur',
         ];
     }
 
@@ -40,9 +40,9 @@ class StoreUserRequest extends FormRequest
             'email.unique' => 'Cet email est déjà utilisé.',
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
-            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+           
             'role.required' => 'Le rôle est obligatoire.',
-            'role.in' => 'Le rôle doit être "user" ou "admin".',
+            'role.in' => 'Le rôle doit être "user" ou "admin" ou "annimateur".',
         ];
     }
 }

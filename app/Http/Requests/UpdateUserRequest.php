@@ -39,7 +39,7 @@ class UpdateUserRequest extends FormRequest
             'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
             'role.required' => 'Le rôle est obligatoire.',
-            'role.in' => 'Le rôle doit être "user" ou "admin".',
+            'role.in' => 'Le rôle doit être "user" ou "admin"ou "annimateur".',
         ];
     }
 }

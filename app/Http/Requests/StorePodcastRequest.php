@@ -24,6 +24,7 @@ class StorePodcastRequest extends FormRequest
         return [
            'title' => 'required|string|min:3|max:100',
             'description' => 'nullable|string|max:1000',
+            
         ];
     }
      public function messages(): array

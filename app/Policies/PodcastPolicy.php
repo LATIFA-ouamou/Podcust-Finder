@@ -9,58 +9,49 @@ use Illuminate\Auth\Access\Response;
 class PodcastPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Qui peut créer un podcast ?
      */
-    public function viewAny(User $user): bool
+    public function create(User $user): Response
     {
-        //
+        return in_array($user->role, ['admin', 'annimateur'])
+            ? Response::allow()
+            : Response::deny("Vous n'avez pas la permission de créer un podcast.");
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Qui peut mettre à jour un podcast ?
      */
-    public function view(User $user, Podcast $podcast): bool
+    public function update(User $user, Podcast $podcast): Response
     {
-        //
+        
+        if ($user->role === 'admin') {
+            return Response::allow();
+        }
+
+      
+        if ($user->role === 'annimateur' && $podcast->user_id == $user->id) {
+            return Response::allow();
+        }
+
+       
+        return Response::deny("Vous n'avez pas la permission de mettre à jour ce podcast.");
     }
 
     /**
-     * Determine whether the user can create models.
+     * Qui peut supprimer un podcast ?
      */
-    public function create(User $user): bool
+    public function delete(User $user, Podcast $podcast): Response
     {
-        //
-    }
+        
+        if ($user->role === 'admin') {
+            return Response::allow();
+        }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Podcast $podcast): bool
-    {
-        //
-    }
+        
+        if ($user->role === 'annimateur' && $podcast->user_id == $user->id) {
+            return Response::allow();
+        }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Podcast $podcast): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Podcast $podcast): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Podcast $podcast): bool
-    {
-        //
+        return Response::deny("Vous n'avez pas la permission de supprimer ce podcast.");
     }
 }

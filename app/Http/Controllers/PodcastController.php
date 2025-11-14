@@ -3,37 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Podcast;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePodcastRequest;
 use App\Http\Requests\UpdatePodcastRequest;
 
 class PodcastController extends Controller
 {
-    /**
-     * Lister tous les podcasts
-     */
+    
     public function index()
     {
-        return Podcast::with('user')->latest()->get();
+        return response()->json(Podcast::all());
     }
 
-    /**
-     * Créer un nouveau podcast
-     */
+  
     public function store(StorePodcastRequest $request)
     {
-        $user = Auth::user();
+        $this->authorize('create',Podcast::class);
+        
+        $data = $request->validated();
 
-        $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('podcasts', 'public')
-            : null;
+        
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('podcasts', 'public');
+            $data['image'] = $path;
+        } 
 
-        $podcast = Podcast::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => $imagePath,
-            'user_id' => $user->id,
-        ]);
+        $podcast = $request->user()->podcasts()->create($data);
 
         return response()->json([
             'message' => 'Podcast créé avec succès',
@@ -41,45 +35,42 @@ class PodcastController extends Controller
         ], 201);
     }
 
-    /**
-     * Mettre à jour un podcast existant
-     */
+   
+    public function show(Podcast $podcast)
+    {
+        return response()->json($podcast);
+    }
+
+   
     public function update(UpdatePodcastRequest $request, Podcast $podcast)
     {
-        $user = Auth::user();
+         $this->authorize('update', $podcast);
+        $data = $request->validated();
 
-        if ($user->id !== $podcast->user_id && $user->role !== 'admin') {
-            return response()->json(['message' => 'Accès refusé'], 403);
-        }
-
-        // Si une nouvelle image est envoyée
+       
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('podcasts', 'public');
-            $podcast->image = $imagePath;
+            $path = $request->file('image')->store('podcasts', 'public');
+            $data['image'] = $path;
         }
 
-        // Met à jour uniquement les champs envoyés
-        $podcast->update($request->only(['title', 'description']));
+        $podcast->update($data);
 
         return response()->json([
             'message' => 'Podcast mis à jour avec succès',
-            'podcast' => $podcast
+            'podcast' => $podcast,
         ]);
     }
 
-    /**
-     * Supprimer un podcast
-     */
+   
+
+
     public function destroy(Podcast $podcast)
     {
-        $user = Auth::user();
-
-        if ($user->id !== $podcast->user_id && $user->role !== 'admin') {
-            return response()->json(['message' => 'Accès refusé'], 403);
-        }
-
+         $this->authorize('delete', $podcast);
         $podcast->delete();
 
         return response()->json(['message' => 'Podcast supprimé avec succès']);
+
+
     }
 }

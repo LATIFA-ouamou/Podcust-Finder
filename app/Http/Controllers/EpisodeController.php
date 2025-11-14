@@ -5,62 +5,84 @@ namespace App\Http\Controllers;
 use App\Models\Episode;
 use App\Http\Requests\StoreEpisodeRequest;
 use App\Http\Requests\UpdateEpisodeRequest;
+use App\Models\Podcast;
 
 class EpisodeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
-        //
+        
+        $episodes = Episode::with('podcast')->get();
+
+        return response()->json($episodes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+  
+public function store(StoreEpisodeRequest $request, Podcast $podcast)
+{
+    try {
+     $this->authorize('create', Episode::class);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreEpisodeRequest $request)
-    {
-        //
-    }
+        $episode = $podcast->episodes()->create($request->validated());
+        $episode->load('podcast');
+        return response()->json([
+            'message' => 'Épisode créé avec succès',
+            'episode' => $episode
+        ], 201);
 
-    /**
-     * Display the specified resource.
-     */
+    } catch (\Exception $th) {
+       
+        return response()->json([
+            'error' => $th->getMessage()
+        ], 500);
+    }
+}
+
+
+    
     public function show(Episode $episode)
+
     {
-        //
+
+        $episode->load('podcast');
+
+        return response()->json($episode);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Episode $episode)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(UpdateEpisodeRequest $request, Episode $episode)
-    {
-        //
+    { $this->authorize('update', $episode);
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('episodes', 'public');
+            $data['image'] = $path;
+        }
+
+        $episode->update($data);
+
+        return response()->json([
+            'message' => 'Épisode mis à jour avec succès',
+            'episode' => $episode,
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(Episode $episode)
-    {
-        //
+    {  $this->authorize('delete', $episode);
+        $episode->delete();
+
+        return response()->json(['message' => 'Épisode supprimé avec succès']);
     }
+
+
+
+    public function listByPodcast(Podcast $podcast)
+{
+    return response()->json(
+        $podcast->episodes()->with('podcast')->get()
+    );
+}
+
 }

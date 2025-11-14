@@ -17,9 +17,9 @@ class StoreEpisodeRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:3|max:150',
-            'description' => 'nullable|string|max:1000',
-            'audio_file' => 'nullable|file|mimes:mp3,wav,ogg|max:10240', 
-            'duration' => 'nullable|string|max:10',
+        'description' => 'nullable|string|max:1000',
+        'audio_file' => 'nullable|file|mimes:mp3,wav,ogg|max:10240',
+        'duration' => 'nullable|string|max:10',
         ];
     }
 

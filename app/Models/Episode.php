@@ -13,7 +13,8 @@ class Episode extends Model
         'title',
         'description',
         'audio_file',
-        'duration'
+        'duration',
+        'podcast_id',
     ];
 
 

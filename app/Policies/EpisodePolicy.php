@@ -9,58 +9,46 @@ use Illuminate\Auth\Access\Response;
 class EpisodePolicy
 {
     /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Episode $episode): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
+     * Qui peut créer un épisode ?
      */
     public function create(User $user): bool
     {
-        //
+        return in_array($user->role, ['admin', 'animateur']);
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Qui peut mettre à jour un épisode ?
      */
-    public function update(User $user, Episode $episode): bool
+    public function update(User $user, Episode $episode): Response
     {
-        //
+        
+        if ($user->role === 'admin') {
+            return Response::allow();
+        }
+
+       
+        if ($user->role === 'animateur' && $episode->podcast->user_id == $user->id) {
+            return Response::allow();
+        }
+
+        return Response::deny("Vous n'avez pas la permission de mettre à jour cet épisode.");
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Qui peut supprimer un épisode ?
      */
-    public function delete(User $user, Episode $episode): bool
+    public function delete(User $user, Episode $episode): Response
     {
-        //
-    }
+        
+        if ($user->role === 'admin') {
+            return Response::allow();
+        }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Episode $episode): bool
-    {
-        //
-    }
+       
+        if ($user->role === 'animateur' && $episode->podcast->user_id == $user->id) {
+            return Response::allow();
+        }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Episode $episode): bool
-    {
-        //
+        return Response::deny("Vous n'avez pas la permission de supprimer cet épisode.");
     }
 }

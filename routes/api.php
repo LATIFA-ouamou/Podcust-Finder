@@ -73,9 +73,6 @@ Route::get('/podcasts/{podcast}', [PodcastController::class, 'show']);
         Route::put('/users/{user}', [UserController::class, 'update']); 
     });
 
-
-
-
     Route::get('/users/{user}', [UserController::class, 'show']); 
 });
 

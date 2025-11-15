@@ -8,6 +8,37 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     tags={"Authentification"},
+     *     summary="Créer un nouveau compte utilisateur",
+     *     description="Inscription d'un nouvel utilisateur et génération d'un token",
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","email","password","role"},
+     *             @OA\Property(property="name", type="string", example="Sara"),
+     *             @OA\Property(property="email", type="string", example="sara@gmail.com"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *             @OA\Property(property="role", type="string", example="user")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=201,
+     *         description="Inscription réussie"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erreur de validation"
+     *     )
+     * )
+     */
     public function register(Request $request){
         $validated=$request->validate([
         'name' => 'required|min:3',
@@ -46,6 +77,33 @@ class AuthController extends Controller
     }
 
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     tags={"Authentification"},
+     *     summary="Connexion utilisateur",
+     *     description="Vérifie les identifiants et renvoie un token",
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", example="sara@gmail.com"),
+     *             @OA\Property(property="password", type="string", example="12345678")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Connexion réussie"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Identifiants incorrects"
+     *     )
+     * )
+     */
 public function login(Request $request)
     {
         $fields = $request->validate([
@@ -73,7 +131,20 @@ public function login(Request $request)
     }
 
 
-
+/**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     tags={"Authentification"},
+     *     summary="Déconnexion de l'utilisateur",
+     *     security={{ "sanctum": {} }},
+     *     description="Supprime le token actif",
+     *     
+     *     @OA\Response(
+     *         response=200,
+     *         description="Déconnecté avec succès"
+     *     )
+     * )
+     */
      public function logout(Request $request)
     {
 

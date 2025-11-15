@@ -1,0 +1,1010 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "users",
+        "description": "Documentation du CRUD avec Swagger",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Créer un nouveau compte utilisateur",
+                "description": "Inscription d'un nouvel utilisateur et génération d'un token",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Sara"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "sara@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "user"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Inscription réussie"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Connexion utilisateur",
+                "description": "Vérifie les identifiants et renvoie un token",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "sara@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie"
+                    },
+                    "401": {
+                        "description": "Identifiants incorrects"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Déconnexion de l'utilisateur",
+                "description": "Supprime le token actif",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Déconnecté avec succès"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/episodes": {
+            "get": {
+                "tags": [
+                    "Episodes"
+                ],
+                "summary": "Liste de tous les épisodes",
+                "operationId": "39bb119c426c59c593560bf467c00fe9",
+                "responses": {
+                    "200": {
+                        "description": "Liste récupérée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Episode"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/podcasts/{podcast}/episodes": {
+            "post": {
+                "tags": [
+                    "Episodes"
+                ],
+                "summary": "Créer un épisode pour un podcast",
+                "operationId": "74ca2d647a4ffb5253b26328b91f8762",
+                "parameters": [
+                    {
+                        "name": "podcast",
+                        "in": "path",
+                        "description": "ID du podcast",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "audio": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Épisode créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Episode"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/episodes/{id}": {
+            "get": {
+                "tags": [
+                    "Episodes"
+                ],
+                "summary": "Afficher un épisode",
+                "operationId": "682c9f0b582614c5d25814ad0a6659c0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'épisode",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Épisode trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Episode"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Episodes"
+                ],
+                "summary": "Mettre à jour un épisode",
+                "operationId": "7c242aee03c0c562d61e184cc40ffbcf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'épisode",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Épisode mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Episode"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Episodes"
+                ],
+                "summary": "Supprimer un épisode",
+                "operationId": "2b31a0a0e3d3c3f435a21fe63779b608",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'épisode",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Épisode supprimé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/hosts": {
+            "get": {
+                "tags": [
+                    "Hosts"
+                ],
+                "summary": "Lister tous les animateurs",
+                "operationId": "61fb7cf6434cd6a1dc845f6473680f64",
+                "responses": {
+                    "200": {
+                        "description": "Liste des animateurs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            },
+                                            "role": {
+                                                "type": "string",
+                                                "example": "animateur"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Hosts"
+                ],
+                "summary": "Créer un nouvel animateur",
+                "operationId": "834c934f594f7e461b9c57b4950e7b29",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Animateur créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "host": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/hosts/{id}": {
+            "get": {
+                "tags": [
+                    "Hosts"
+                ],
+                "summary": "Afficher un animateur",
+                "operationId": "6a15087196d0467f62bb946379e9543a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'animateur",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'animateur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string",
+                                            "example": "animateur"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cet utilisateur n’est pas un animateur"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Hosts"
+                ],
+                "summary": "Mettre à jour un animateur",
+                "operationId": "7509fea05e56da500488b55d7f91cf03",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'animateur",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Animateur mis à jour avec succès"
+                    },
+                    "404": {
+                        "description": "Cet utilisateur n’est pas un animateur"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Hosts"
+                ],
+                "summary": "Supprimer un animateur",
+                "operationId": "b604ac9104ad9953d3abff9d9d9f98b3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'animateur",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Animateur supprimé avec succès"
+                    },
+                    "404": {
+                        "description": "Cet utilisateur n’est pas un animateur"
+                    }
+                }
+            }
+        },
+        "/api/podcasts": {
+            "get": {
+                "tags": [
+                    "Podcasts"
+                ],
+                "summary": "Lister tous les podcasts",
+                "operationId": "28abe6e0a78fe6785659a51dde99679e",
+                "responses": {
+                    "200": {
+                        "description": "Liste des podcasts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Podcast"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Podcasts"
+                ],
+                "summary": "Créer un podcast (admin ou animateur)",
+                "operationId": "e8917ecbdaa178c760e0992b16b91fb1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Podcast créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Podcast"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/podcasts/{id}": {
+            "get": {
+                "tags": [
+                    "Podcasts"
+                ],
+                "summary": "Afficher un podcast",
+                "operationId": "9009d1f97f328b3e48f85075f935aa0f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du podcast",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Podcast trouvé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Podcast"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Podcast non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Podcasts"
+                ],
+                "summary": "Modifier un podcast (admin ou animateur propriétaire)",
+                "operationId": "e72afa88b52a2b4864a2e29cca8cdabc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du podcast",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Podcast mis à jour"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Podcasts"
+                ],
+                "summary": "Supprimer un podcast (admin ou animateur propriétaire)",
+                "operationId": "378754b8c72fa0738edc3691e12cfb13",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Podcast supprimé avec succès"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Liste de tous les utilisateurs",
+                "operationId": "c457726701591d1183b53aa71fc13441",
+                "responses": {
+                    "200": {
+                        "description": "Liste retournée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Créer un utilisateur",
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Sara"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "sara@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "user"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Modifier un utilisateur",
+                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Sara Update"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "sara_update@gmail.com"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mise à jour réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Supprimer un utilisateur",
+                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur supprimé"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Episode": {
+                "title": "Episode",
+                "required": [
+                    "id",
+                    "title",
+                    "description",
+                    "podcast_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "audio": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "image": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "podcast_id": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "Podcast": {
+                "title": "Podcast",
+                "required": [
+                    "id",
+                    "title",
+                    "description",
+                    "user_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "role"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Latifa"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "latifa@mail.com"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "******"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Episodes",
+            "description": "Gestion des épisodes"
+        },
+        {
+            "name": "Hosts",
+            "description": "Gestion des annimateurs"
+        },
+        {
+            "name": "Podcasts",
+            "description": "Gestion des podcasts (admin et annimateur)"
+        },
+        {
+            "name": "Authentification",
+            "description": "Authentification"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}

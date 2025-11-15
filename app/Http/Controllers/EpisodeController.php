@@ -196,7 +196,10 @@ public function store(StoreEpisodeRequest $request, Podcast $podcast)
 
 
     public function destroy(Episode $episode)
-    {  $this->authorize('delete', $episode);
+
+    {  
+        $this->authorize('delete', $episode);
+        
         $episode->delete();
 
         return response()->json(['message' => 'Épisode supprimé avec succès']);

@@ -13,7 +13,7 @@ class EpisodePolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user->role, ['admin', 'animateur']);
+        return in_array($user->role, ['admin', 'annimateur']);
     }
 
     /**
@@ -27,7 +27,7 @@ class EpisodePolicy
         }
 
        
-        if ($user->role === 'animateur' && $episode->podcast->user_id == $user->id) {
+        if ($user->role === 'annimateur' && $episode->podcast->user_id == $user->id) {
             return Response::allow();
         }
 
@@ -36,6 +36,7 @@ class EpisodePolicy
 
     /**
      * Qui peut supprimer un épisode ?
+     * 
      */
     public function delete(User $user, Episode $episode): Response
     {
@@ -45,7 +46,7 @@ class EpisodePolicy
         }
 
        
-        if ($user->role === 'animateur' && $episode->podcast->user_id == $user->id) {
+        if ($user->role === 'annimateur' && $episode->podcast->user_id == $user->id) {
             return Response::allow();
         }
 

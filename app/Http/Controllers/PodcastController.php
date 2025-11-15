@@ -36,6 +36,9 @@ class PodcastController extends Controller
         return response()->json(Podcast::all());
     }
 
+
+
+
     /**
  * @OA\Post(
  *     path="/api/podcasts",

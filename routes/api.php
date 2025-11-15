@@ -40,6 +40,8 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 
 
 Route::get('/podcasts', [PodcastController::class, 'index']);
+Route::get('/podcasts/{podcast}', [PodcastController::class, 'show']);
+
 
     Route::middleware('auth:sanctum')->group(function () {
 
@@ -93,12 +95,15 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 
 
+
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('episodes', [EpisodeController::class, 'index']);
+Route::get('episodes/{episode}', [EpisodeController::class,'show']);
+
 
     Route::post('podcasts/{podcast}/episodes', [EpisodeController::class, 'store']);
-Route::get('episodes/{episode}', [EpisodeController::class, 'show']);
+
     Route::put('episodes/{episode}', [EpisodeController::class, 'update']);
 
     Route::delete('episodes/{episode}', [EpisodeController::class, 'destroy']);

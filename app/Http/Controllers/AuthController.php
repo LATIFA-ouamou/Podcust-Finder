@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResetPasswordRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -129,6 +131,39 @@ public function login(Request $request)
             
         ]);
     }
+
+
+public function reset(ResetPasswordRequest $request)
+{
+    try {
+        $infos = $request->validated();
+
+        $user = User::where('email', $infos['email'])->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Aucun utilisateur trouvé avec cet email.'
+            ], 404);
+        }
+
+        $user->update([
+            'password' => Hash::make($infos['password'])
+        ]);
+
+        return response()->json([
+            'message' => 'Votre mot de passe est réinitialisé avec succès.'
+        ], 200);
+
+    } catch (Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
+
+
 
 
 /**

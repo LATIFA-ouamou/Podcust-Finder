@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register',[AuthController::class,'register']);
 
 Route::post('login',[AuthController::class,'login']);
+Route::post('reset-password', [AuthController::class, 'reset']);
 
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
@@ -39,11 +40,13 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 
 
 
-Route::get('/podcasts', [PodcastController::class, 'index']);
-Route::get('/podcasts/{podcast}', [PodcastController::class, 'show']);
+
 
 
     Route::middleware('auth:sanctum')->group(function () {
+Route::get('/podcasts', [PodcastController::class, 'index']);
+Route::get('/podcasts/{podcast}', [PodcastController::class, 'show']);
+
 
     Route::post('/podcasts', [PodcastController::class, 'store']);
     Route::put('/podcasts/{podcast}', [PodcastController::class, 'update']);

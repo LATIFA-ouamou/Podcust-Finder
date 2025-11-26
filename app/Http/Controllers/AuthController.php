@@ -194,6 +194,9 @@ public function test1(){
     return "hello test1";
 }
 
+public function testT(){
+    return "hi";
+}
 
 
 

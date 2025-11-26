@@ -191,6 +191,8 @@ public function reset(ResetPasswordRequest $request)
     }
 
 
-
+public function test2(){
+    return "test";
+}
 
 }

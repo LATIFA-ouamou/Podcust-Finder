@@ -201,4 +201,8 @@ public function testT(){
     return "hi";
 }
 
+public function hi(){
+    return "hi";
+}
+
 }

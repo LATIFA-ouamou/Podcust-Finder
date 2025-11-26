@@ -197,22 +197,5 @@ public function test2(){
 }
 
 
-public function hello(){
-    return "helo";
-
-}
-
-
-
-function test1(){
-    return "hi";
-}
-
-
-public function test3(){
-    return "test3";
-}
-
-
 
 }

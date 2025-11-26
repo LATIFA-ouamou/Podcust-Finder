@@ -190,7 +190,9 @@ public function reset(ResetPasswordRequest $request)
 
     }
 
-
+public function test1(){
+    return "hello test1";
+}
 
 
 }

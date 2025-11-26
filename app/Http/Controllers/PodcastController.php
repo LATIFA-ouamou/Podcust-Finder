@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Podcast;
 use App\Http\Requests\StorePodcastRequest;
 use App\Http\Requests\UpdatePodcastRequest;
+use Illuminate\Http\Request;
 
 class PodcastController extends Controller
 
@@ -192,5 +193,21 @@ class PodcastController extends Controller
         return response()->json(['message' => 'Podcast supprimé avec succès']);
 
 
+    }
+
+
+
+    
+
+    public function search(Request $request)
+    {
+        $search = $request->input('query');
+
+        $podcasts = Podcast::where('title', 'LIKE', "%$search%")
+            ->orWhere('description', 'LIKE', "%$search%")
+          
+            ->get();
+
+        return response()->json($podcasts);
     }
 }

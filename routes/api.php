@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -7,6 +8,7 @@ use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\UserController;
  use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\HostController;
+use Cloudinary\Api\ApiClient;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,10 +45,7 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 
 
 
-    Route::middleware('auth:sanctum')->group(function () {
-Route::get('/podcasts', [PodcastController::class, 'index']);
-Route::get('/podcasts/{podcast}', [PodcastController::class, 'show']);
-
+Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/podcasts', [PodcastController::class, 'store']);
     Route::put('/podcasts/{podcast}', [PodcastController::class, 'update']);
@@ -56,33 +55,30 @@ Route::get('/podcasts/{podcast}', [PodcastController::class, 'show']);
 
 });
 
-
+Route::get('/podcasts', [PodcastController::class, 'index']);
+Route::get('/podcasts/{podcast}', [PodcastController::class, 'show']);
+Route::get ('search',[PodcastController::class,'search']);
 
 
 
 
  Route::middleware(['auth:sanctum'])->group(function () {
     
-  
+ 
+    
     Route::middleware('role:admin')->group(function () {
 
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{user}', [UserController::class, 'show']); 
 
-        Route::get('/users', [UserController::class, 'index']);   
+         
         Route::post('/users', [UserController::class, 'store']);  
         Route::delete('/users/{user}', [UserController::class, 'destroy']); 
         Route::put('/users/{user}', [UserController::class, 'update']); 
     });
 
-    Route::get('/users/{user}', [UserController::class, 'show']); 
+    
 });
-
-
-
-
-
-
-
-
 
  
  
@@ -98,20 +94,22 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('episodes', [EpisodeController::class, 'index']);
-Route::get('episodes/{episode}', [EpisodeController::class,'show']);
 
 
     Route::post('podcasts/{podcast}/episodes', [EpisodeController::class, 'store']);
 
-    Route::put('episodes/{episode}', [EpisodeController::class, 'update']);
+    Route::put('podcasts/{podcast}/episodes/{episode}', [EpisodeController::class, 'update']);
 
-    Route::delete('episodes/{episode}', [EpisodeController::class, 'destroy']);
-    Route::get('/podcasts/{podcast}/episodes', [EpisodeController::class, 'listByPodcast']);
+    Route::delete('podcasts/{podcast}/episodes/{episode}', [EpisodeController::class, 'destroy']);
+   
 });
 
 
+    Route::get('episodes', [EpisodeController::class, 'index']);
+Route::get('episodes/{episode}', [EpisodeController::class,'show']);
 
 
 
+
+Route::get ('adress',[Api::class,'Aderesse'])->middleware(['auth:sanctum','role:admin']);
 

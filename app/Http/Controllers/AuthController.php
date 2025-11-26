@@ -57,7 +57,7 @@ class AuthController extends Controller
         'role' =>  $validated['role'],
 
     ]);
-   //  token pour l'auth
+ 
     $token = $user->createToken($user->name)->plainTextToken;
         
     return response()->json([
@@ -67,9 +67,7 @@ class AuthController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'role' => $user->role,
-            
-
-        
+          
         ],
         'token' => $token
     ], 201);
@@ -112,6 +110,8 @@ public function login(Request $request)
             'email' => 'required|string|email',
             'password' => 'required|string'
         ]);
+
+        
 
         $user = User::where('email', $fields['email'])->first();
 
@@ -191,8 +191,28 @@ public function reset(ResetPasswordRequest $request)
     }
 
 
+
 public function test2(){
     return "test";
 }
+
+
+public function hello(){
+    return "helo";
+
+}
+
+
+
+function test1(){
+    return "hi";
+}
+
+
+public function test3(){
+    return "test3";
+}
+
+
 
 }

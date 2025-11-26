@@ -197,5 +197,8 @@ public function test1(){
     return "hello";
 }
 
+public function testT(){
+    return "hi";
+}
 
 }

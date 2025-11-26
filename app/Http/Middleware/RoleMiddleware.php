@@ -15,12 +15,12 @@ class RoleMiddleware
     {
         $user = $request->user();
 
-        // Vérifie si l'utilisateur est connecté
+        
         if (!$user) {
             return response()->json(['message' => 'Non autorisé'], 401);
         }
 
-        // Vérifie que l'utilisateur a un rôle inclus dans la liste
+        
         if (!in_array($user->role, $roles)) {
             return response()->json(['message' => 'Accès refusé'], 403);
         }

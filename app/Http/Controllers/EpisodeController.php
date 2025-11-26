@@ -16,6 +16,10 @@ use Illuminate\Http\Request;
  */
 class EpisodeController extends Controller
 {
+    
+
+
+
     /**
      * @OA\Get(
      *     path="/api/episodes",
@@ -28,6 +32,8 @@ class EpisodeController extends Controller
      *     )
      * )
      */
+
+
     public function index()
     {
         $episodes = Episode::with('podcast')->get();
@@ -149,7 +155,7 @@ class EpisodeController extends Controller
      *     )
      * )
      */
-    public function update(UpdateEpisodeRequest $request, Episode $episode)
+    public function update(UpdateEpisodeRequest $request,Podcast $podcast, Episode $episode)
     {
         $this->authorize('update', $episode);
 
@@ -187,7 +193,7 @@ class EpisodeController extends Controller
      *     )
      * )
      */
-    public function destroy(Episode $episode)
+    public function destroy(Podcast $podcast,Episode $episode)
     {
         $this->authorize('delete', $episode);
 
@@ -196,13 +202,5 @@ class EpisodeController extends Controller
         return response()->json(['message' => 'Épisode supprimé avec succès']);
     }
 
-    /**
-     * Liste des épisodes par podcast
-     */
-    public function listByPodcast(Podcast $podcast)
-    {
-        return response()->json(
-            $podcast->episodes()->with('podcast')->get()
-        );
-    }
+  
 }

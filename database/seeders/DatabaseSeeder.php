@@ -14,9 +14,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crée 5 utilisateurs
+        // Crée 5 users
         User::factory(5)->create()->each(function ($user) {
-            // Pour chaque utilisateur, créer 3 podcasts
+            // Pour chaque user 3 podcasts
             Podcast::factory(3)->create([
                 'user_id' => $user->id
             ])->each(function ($podcast) {

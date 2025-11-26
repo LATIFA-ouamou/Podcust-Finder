@@ -192,13 +192,9 @@ public function reset(ResetPasswordRequest $request)
 
 
 
-
-public function test1(){
-    return "hello";
+public function hello(){
+    return "hello ";
 }
 
-public function testT(){
-    return "hi";
-}
 
 }

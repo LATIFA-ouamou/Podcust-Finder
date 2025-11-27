@@ -190,12 +190,8 @@ public function reset(ResetPasswordRequest $request)
 
     }
 
-
-public function hello(){
-    return "hi";
-}
-public function test(){
-    return "test";
+public function branchtest(){
+    return "hi from branch test";
 
 }
 

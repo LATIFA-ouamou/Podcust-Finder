@@ -194,7 +194,7 @@ public function reset(ResetPasswordRequest $request)
 public function hello(
 
 ){
-    return "hello from main";
+    return "hello update main";
 }
 }
 

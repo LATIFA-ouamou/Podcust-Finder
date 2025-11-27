@@ -199,6 +199,10 @@ public function test(){
 
 }
 
+public function branchMain(){
+    return "hi from main";
+}
+
 
 }
 
